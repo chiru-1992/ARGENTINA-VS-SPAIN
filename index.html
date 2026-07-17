@@ -5,95 +5,142 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FIFA 2026 Final Tickets</title>
 <style>
+  /* Dynamic Colorful Background */
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #0b0f19;
+    background: linear-gradient(-45deg, #0f172a, #310a31, #082f49, #170f2e);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
     color: #f8fafc;
     text-align: center;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
   }
+
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
   
   #welcome-screen {
-    padding: 60px 20px;
-    max-width: 800px;
+    padding: 40px 20px;
+    max-width: 1000px;
     margin: 0 auto;
   }
   
   h1 {
-    font-size: 3.5rem;
+    font-size: 3.2rem;
     color: #fbbf24;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     text-transform: uppercase;
     letter-spacing: 2px;
+    text-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
   }
   
   h2 {
-    font-size: 2rem;
-    color: #f1f5f9;
-    font-weight: 600;
-    margin-bottom: 10px;
+    font-size: 1.5rem;
+    color: #38bdf8;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
   }
   
-  .match-details {
-    font-size: 1.4rem;
-    color: #94a3b8;
-    margin-bottom: 40px;
-    background: rgba(255,255,255,0.05);
+  h3 {
+    font-size: 1.2rem;
+    color: #f1f5f9;
+    background: rgba(255,255,255,0.1);
     display: inline-block;
-    padding: 10px 30px;
-    border-radius: 50px;
-    border: 1px solid rgba(255,255,255,0.1);
+    padding: 10px 25px;
+    border-radius: 30px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255,255,255,0.2);
   }
   
   #unlock-section {
-    margin-top: 20px;
+    margin-bottom: 40px;
   }
   
   input[type="text"] {
     padding: 15px 20px;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     border-radius: 8px;
-    border: 2px solid #3b82f6;
-    background-color: #1e293b;
+    border: 2px solid #fbbf24;
+    background-color: rgba(15, 23, 42, 0.8);
     color: white;
     outline: none;
-    width: 280px;
+    width: 300px;
+    text-align: center;
     transition: all 0.3s;
   }
   
   input[type="text"]:focus {
-    border-color: #60a5fa;
-    box-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.6);
   }
   
   button {
     padding: 15px 30px;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     border: none;
     border-radius: 8px;
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
     color: white;
     cursor: pointer;
     font-weight: bold;
     margin-left: 12px;
     transition: all 0.3s;
-    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+    box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
   }
   
   button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+    box-shadow: 0 6px 20px rgba(217, 119, 6, 0.7);
+  }
+
+  /* Locked Tickets Grid */
+  #locked-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+  }
+
+  .locked-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    width: 120px;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    transition: all 0.3s;
   }
   
+  .locked-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    transform: scale(1.05);
+  }
+
+  .locked-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+
+  /* Presentation Area for Single / Sequence Tickets */
   .ticket-container {
     position: relative;
     width: 100%;
-    max-width: 700px;
-    margin: 20px auto;
-    height: 480px;
+    max-width: 800px;
+    margin: 40px auto;
+    height: 550px;
     perspective: 1500px;
+    display: none; /* Hidden until unlocked */
   }
   
   .ticket {
@@ -101,48 +148,71 @@
     top: 0;
     left: 50%;
     transform: translateX(-50%) translateZ(-1000px) scale(0.4);
-    width: 92%;
-    background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+    width: 90%;
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
     color: #0f172a;
-    border-radius: 16px;
-    padding: 30px;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.8);
     opacity: 0;
     transition: all 1.8s cubic-bezier(0.34, 1.56, 0.64, 1);
     box-sizing: border-box;
     pointer-events: none;
   }
   
+  /* Make ticket larger and closer when active */
   .ticket.active {
-    transform: translateX(-50%) translateZ(0) scale(1);
+    transform: translateX(-50%) translateZ(100px) scale(1.15); 
     opacity: 1;
     z-index: 10;
   }
   
   .ticket.diluted {
-    transform: translateX(-50%) translateZ(500px) translateY(-80px) scale(1.1);
+    transform: translateX(-50%) translateZ(500px) translateY(-100px) scale(1.2);
     opacity: 0;
     z-index: 1;
     transition: all 1.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
   }
+
+  /* Grid View for "ALL" command */
+  #all-tickets-grid {
+    display: none; /* Hidden until unlocked */
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 40px;
+  }
+
+  #all-tickets-grid .ticket-static {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+    color: #0f172a;
+    border-radius: 16px;
+    padding: 20px;
+    width: 350px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  }
   
+  /* Inner Ticket Elements */
   .ticket-header {
     border-bottom: 3px dashed #cbd5e1;
-    padding-bottom: 15px;
-    margin-bottom: 25px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
   }
   
   .ticket-header h3 {
     margin: 0;
-    font-size: 2rem;
+    font-size: 2.2rem;
     color: #1e293b;
     letter-spacing: 1px;
+    background: none;
+    border: none;
+    padding: 0;
   }
   
   .players-reveal {
     opacity: 0;
     transform: translateY(20px);
-    transition: all 2s ease-out;
+    transition: all 1.5s ease-out;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -152,14 +222,19 @@
     opacity: 1;
     transform: translateY(0);
   }
+
+  .ticket-static .players-reveal {
+    opacity: 1;
+    transform: translateY(0);
+  }
   
   .player {
     text-align: center;
-    width: 44%;
-    background: rgba(15, 23, 42, 0.03);
+    width: 42%;
+    background: rgba(15, 23, 42, 0.04);
     padding: 15px;
     border-radius: 12px;
-    border: 1px solid rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.06);
   }
   
   .player h4 {
@@ -173,8 +248,8 @@
   
   .player p {
     font-weight: 700;
-    font-size: 1.2rem;
-    margin: 5px 0 15px 0;
+    font-size: 1.3rem;
+    margin: 5px 0 10px 0;
     color: #334155;
   }
   
@@ -183,8 +258,13 @@
     height: 130px;
     object-fit: cover;
     border-radius: 50%;
-    border: 5px solid #fff;
+    border: 4px solid #fff;
     box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  }
+
+  .ticket-static .player img {
+    width: 90px;
+    height: 90px;
   }
   
   .vs-badge {
@@ -192,222 +272,226 @@
     font-weight: 900;
     color: #94a3b8;
     font-style: italic;
-    background: #f1f5f9;
+    background: #e2e8f0;
     padding: 10px 15px;
     border-radius: 50%;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
   }
 </style>
 </head>
 <body>
 
+<!-- Audio for background stadium cheering -->
+<audio id="stadium-cheer" src="https://actions.google.com/sounds/v1/crowds/crowd_cheer.ogg" preload="auto"></audio>
+
 <div id="welcome-screen">
-  <h1>welcome to the finals</h1>
-  <h2>final of FIFA 2026 Argentina versus Spain</h2>
-  <div class="match-details">take 20 July time 12:30 a.m.</div>
+  <h1>WELCOME TO FIFA WORLD CUP FINAL 2026</h1>
+  <h2>CREATOR - CHIRANJEEVI GURUNG</h2>
+  <h3>please ask for code to creator to see your ticket</h3>
   
   <div id="unlock-section">
-    <input type="text" id="reveal-code" placeholder="Place to reveal the ticket">
-    <button onclick="checkCode()">Reveal Tickets</button>
+    <input type="text" id="reveal-code" placeholder="Enter Code or Ticket Number">
+    <button onclick="processCode()">Reveal</button>
+  </div>
+
+  <div id="locked-grid">
+    <!-- Javascript will generate 23 locked icons here -->
   </div>
 </div>
 
-<div class="ticket-container" id="tickets-wrapper">
-  <!-- JavaScript dynamically generates the tickets here -->
-</div>
+<!-- Container for Sequence or Single Ticket animations -->
+<div class="ticket-container" id="tickets-wrapper"></div>
+
+<!-- Container for ALL tickets grid view -->
+<div id="all-tickets-grid"></div>
 
 <script>
   const ticketsData = [
-    {
-      id: 1,
-      argentina: { name: "Nahuel MOLINA", number: 26, photo: "images/argentina/nahuel_molina.jpg" },
-      spain: { name: "PEDRI", number: 20, photo: "images/spain/pedri.jpg" }
-    },
-    {
-      id: 2,
-      argentina: { name: "Lionel MESSI", number: 10, photo: "images/argentina/lionel_messi.jpg" },
-      spain: { name: "Marc CUCURELLA", number: 24, photo: "images/spain/marc_cucurella.jpg" }
-    },
-    {
-      id: 3,
-      argentina: { name: "Enzo FERNANDEZ", number: 24, photo: "images/argentina/enzo_fernandez.jpg" },
-      spain: { name: "Pau CUBARSI", number: 22, photo: "images/spain/pau_cubarsi.jpg" }
-    },
-    {
-      id: 4,
-      argentina: { name: "Facundo MEDINA", number: 25, photo: "images/argentina/facundo_medina.jpg" },
-      spain: { name: "Martin ZUBIMENDI", number: 18, photo: "images/spain/martin_zubimendi.jpg" }
-    },
-    {
-      id: 5,
-      argentina: { name: "Alexis MAC ALLISTER", number: 20, photo: "images/argentina/alexis_mac_allister.jpg" },
-      spain: { name: "Aymeric LAPORTE", number: 14, photo: "images/spain/aymeric_laporte.jpg" }
-    },
-    {
-      id: 6,
-      argentina: { name: "Nicolas OTAMENDI", number: 19, photo: "images/argentina/nicolas_otamendi.jpg" },
-      spain: { name: "RODRI", number: 16, photo: "images/spain/rodri.jpg" }
-    },
-    {
-      id: 7,
-      argentina: { name: "Nico GONZALEZ", number: 15, photo: "images/argentina/nico_gonzalez.jpg" },
-      spain: { name: "Pedro PORRO", number: 12, photo: "images/spain/pedro_porro.jpg" }
-    },
-    {
-      id: 8,
-      argentina: { name: "Cristian ROMERO", number: 13, photo: "images/argentina/cristian_romero.jpg" },
-      spain: { name: "Alex BAENA", number: 15, photo: "images/spain/alex_baena.jpg" }
-    },
-    {
-      id: 9,
-      argentina: { name: "Exequiel PALACIOS", number: 14, photo: "images/argentina/exequiel_palacios.jpg" },
-      spain: { name: "Marcos LLORENTE", number: 5, photo: "images/spain/marcos_llorente.jpg" }
-    },
-    {
-      id: 10,
-      argentina: { name: "Lisandro MARTINEZ", number: 6, photo: "images/argentina/lisandro_martinez.jpg" },
-      spain: { name: "GAVI", number: 9, photo: "images/spain/gavi.jpg" }
-    },
-    {
-      id: 11,
-      argentina: { name: "Giovani LO CELSO", number: 11, photo: "images/argentina/giovani_lo_celso.jpg" },
-      spain: { name: "Marc PUBILL", number: 2, photo: "images/spain/marc_pubill.jpg" }
-    },
-    {
-      id: 12,
-      argentina: { name: "Nicolas TAGLIAFICO", number: 3, photo: "images/argentina/nicolas_tagliafico.jpg" },
-      spain: { name: "Fabian RUIZ", number: 8, photo: "images/spain/fabian_ruiz.jpg" }
-    },
-    {
-      id: 13,
-      argentina: { name: "Lautaro MARTINEZ", number: 22, photo: "images/argentina/lautaro_martinez.jpg" },
-      spain: { name: "Alex GRIMALDO", number: 3, photo: "images/spain/alex_grimaldo.jpg" }
-    },
-    {
-      id: 14,
-      argentina: { name: "Marcos SENESI", number: 2, photo: "images/argentina/marcos_senesi.jpg" },
-      spain: { name: "Mikel OYARZABAL", number: 21, photo: "images/spain/mikel_oyarzabal.jpg" }
-    },
-    {
-      id: 15,
-      argentina: { name: "Julian ALVAREZ", number: 9, photo: "images/argentina/julian_alvarez.jpg" },
-      spain: { name: "Eric GARCIA", number: 4, photo: "images/spain/eric_garcia.jpg" }
-    },
-    {
-      id: 16,
-      argentina: { name: "Gonzalo MONTIEL", number: 4, photo: "images/argentina/gonzalo_montiel.jpg" },
-      spain: { name: "Ferran TORRES", number: 7, photo: "images/spain/ferran_torres.jpg" }
-    },
-    {
-      id: 17,
-      argentina: { name: "Jose Manuel LOPEZ", number: 21, photo: "images/argentina/jose_manuel_lopez.jpg" },
-      spain: { name: "Mikel MERINO", number: 6, photo: "images/spain/mikel_merino.jpg" }
-    },
-    {
-      id: 18,
-      argentina: { name: "Valentin BARCO", number: 8, photo: "images/argentina/valentina_barco.jpg" },
-      spain: { name: "Borja IGLESIAS", number: 26, photo: "images/spain/borja_iglesias.jpg" }
-    },
-    {
-      id: 19,
-      argentina: { name: "Nico PAZ", number: 18, photo: "images/argentina/nico_paz.jpg" },
-      spain: { name: "Victor MUNOZ", number: 25, photo: "images/spain/victor_munoz.jpg" }
-    },
-    {
-      id: 20,
-      argentina: { name: "Rodrigo DE PAUL", number: 7, photo: "images/argentina/rodrigo_de_paul.jpg" },
-      spain: { name: "Lamine YAMAL", number: 19, photo: "images/spain/lamine_yamal.jpg" }
-    },
-    {
-      id: 21,
-      argentina: { name: "Giuliano SIMEONE", number: 17, photo: "images/argentina/giuliano_simeone.jpg" },
-      spain: { name: "Nico WILLIAMS", number: 17, photo: "images/spain/nico_williams.jpg" }
-    },
-    {
-      id: 22,
-      argentina: { name: "Leandro PAREDES", number: 5, photo: "images/argentina/leandro_paredes.jpg" },
-      spain: { name: "Yeremy PINO", number: 11, photo: "images/spain/yeremy_pino.jpg" }
-    },
-    {
-      id: 23,
-      argentina: { name: "Thiago ALMADA", number: 16, photo: "images/argentina/thiayo_almada.jpg" },
-      spain: { name: "Dani OLMO", number: 10, photo: "images/spain/dani_olmo.jpg" }
-    }
+    { id: 1, argentina: { name: "Nahuel MOLINA", number: 26, photo: "images/argentina/nahuel_molina.jpg" }, spain: { name: "PEDRI", number: 20, photo: "images/spain/pedri.jpg" } },
+    { id: 2, argentina: { name: "Lionel MESSI", number: 10, photo: "images/argentina/lionel_messi.jpg" }, spain: { name: "Marc CUCURELLA", number: 24, photo: "images/spain/marc_cucurella.jpg" } },
+    { id: 3, argentina: { name: "Enzo FERNANDEZ", number: 24, photo: "images/argentina/enzo_fernandez.jpg" }, spain: { name: "Pau CUBARSI", number: 22, photo: "images/spain/pau_cubarsi.jpg" } },
+    { id: 4, argentina: { name: "Facundo MEDINA", number: 25, photo: "images/argentina/facundo_medina.jpg" }, spain: { name: "Martin ZUBIMENDI", number: 18, photo: "images/spain/martin_zubimendi.jpg" } },
+    { id: 5, argentina: { name: "Alexis MAC ALLISTER", number: 20, photo: "images/argentina/alexis_mac_allister.jpg" }, spain: { name: "Aymeric LAPORTE", number: 14, photo: "images/spain/aymeric_laporte.jpg" } },
+    { id: 6, argentina: { name: "Nicolas OTAMENDI", number: 19, photo: "images/argentina/nicolas_otamendi.jpg" }, spain: { name: "RODRI", number: 16, photo: "images/spain/rodri.jpg" } },
+    { id: 7, argentina: { name: "Nico GONZALEZ", number: 15, photo: "images/argentina/nico_gonzalez.jpg" }, spain: { name: "Pedro PORRO", number: 12, photo: "images/spain/pedro_porro.jpg" } },
+    { id: 8, argentina: { name: "Cristian ROMERO", number: 13, photo: "images/argentina/cristian_romero.jpg" }, spain: { name: "Alex BAENA", number: 15, photo: "images/spain/alex_baena.jpg" } },
+    { id: 9, argentina: { name: "Exequiel PALACIOS", number: 14, photo: "images/argentina/exequiel_palacios.jpg" }, spain: { name: "Marcos LLORENTE", number: 5, photo: "images/spain/marcos_llorente.jpg" } },
+    { id: 10, argentina: { name: "Lisandro MARTINEZ", number: 6, photo: "images/argentina/lisandro_martinez.jpg" }, spain: { name: "GAVI", number: 9, photo: "images/spain/gavi.jpg" } },
+    { id: 11, argentina: { name: "Giovani LO CELSO", number: 11, photo: "images/argentina/giovani_lo_celso.jpg" }, spain: { name: "Marc PUBILL", number: 2, photo: "images/spain/marc_pubill.jpg" } },
+    { id: 12, argentina: { name: "Nicolas TAGLIAFICO", number: 3, photo: "images/argentina/nicolas_tagliafico.jpg" }, spain: { name: "Fabian RUIZ", number: 8, photo: "images/spain/fabian_ruiz.jpg" } },
+    { id: 13, argentina: { name: "Lautaro MARTINEZ", number: 22, photo: "images/argentina/lautaro_martinez.jpg" }, spain: { name: "Alex GRIMALDO", number: 3, photo: "images/spain/alex_grimaldo.jpg" } },
+    { id: 14, argentina: { name: "Marcos SENESI", number: 2, photo: "images/argentina/marcos_senesi.jpg" }, spain: { name: "Mikel OYARZABAL", number: 21, photo: "images/spain/mikel_oyarzabal.jpg" } },
+    { id: 15, argentina: { name: "Julian ALVAREZ", number: 9, photo: "images/argentina/julian_alvarez.jpg" }, spain: { name: "Eric GARCIA", number: 4, photo: "images/spain/eric_garcia.jpg" } },
+    { id: 16, argentina: { name: "Gonzalo MONTIEL", number: 4, photo: "images/argentina/gonzalo_montiel.jpg" }, spain: { name: "Ferran TORRES", number: 7, photo: "images/spain/ferran_torres.jpg" } },
+    { id: 17, argentina: { name: "Jose Manuel LOPEZ", number: 21, photo: "images/argentina/jose_manuel_lopez.jpg" }, spain: { name: "Mikel MERINO", number: 6, photo: "images/spain/mikel_merino.jpg" } },
+    { id: 18, argentina: { name: "Valentin BARCO", number: 8, photo: "images/argentina/valentina_barco.jpg" }, spain: { name: "Borja IGLESIAS", number: 26, photo: "images/spain/borja_iglesias.jpg" } },
+    { id: 19, argentina: { name: "Nico PAZ", number: 18, photo: "images/argentina/nico_paz.jpg" }, spain: { name: "Victor MUNOZ", number: 25, photo: "images/spain/victor_munoz.jpg" } },
+    { id: 20, argentina: { name: "Rodrigo DE PAUL", number: 7, photo: "images/argentina/rodrigo_de_paul.jpg" }, spain: { name: "Lamine YAMAL", number: 19, photo: "images/spain/lamine_yamal.jpg" } },
+    { id: 21, argentina: { name: "Giuliano SIMEONE", number: 17, photo: "images/argentina/giuliano_simeone.jpg" }, spain: { name: "Nico WILLIAMS", number: 17, photo: "images/spain/nico_williams.jpg" } },
+    { id: 22, argentina: { name: "Leandro PAREDES", number: 5, photo: "images/argentina/leandro_paredes.jpg" }, spain: { name: "Yeremy PINO", number: 11, photo: "images/spain/yeremy_pino.jpg" } },
+    { id: 23, argentina: { name: "Thiago ALMADA", number: 16, photo: "images/argentina/thiayo_almada.jpg" }, spain: { name: "Dani OLMO", number: 10, photo: "images/spain/dani_olmo.jpg" } }
   ];
 
-  function renderTickets() {
-    const wrapper = document.getElementById('tickets-wrapper');
+  // Initialize Home Screen Locked Grid
+  function initLockedGrid() {
+    const lockedGrid = document.getElementById('locked-grid');
+    for(let i = 1; i <= 23; i++) {
+      lockedGrid.innerHTML += `
+        <div class="locked-card">
+          <div class="locked-icon">🔒</div>
+          Ticket ${i}
+        </div>
+      `;
+    }
+  }
+
+  // Generates HTML string for a ticket (used for both animated and static views)
+  function createTicketHTML(ticket) {
+    return `
+      <div class="ticket-header">
+        <h3>Ticket Number ${ticket.id}</h3>
+      </div>
+      <div class="players-reveal" id="reveal-${ticket.id}">
+        <div class="player">
+          <h4 class="arg-title">Argentina</h4>
+          <p>${ticket.argentina.name}</p>
+          <p style="font-size:0.95rem; margin-top:-10px; color:#64748b;">Jersey #${ticket.argentina.number}</p>
+          <img src="${ticket.argentina.photo}" alt="ARG" onerror="this.src='https://via.placeholder.com/150/7dd3fc/000000?text=ARG'">
+        </div>
+        <div class="vs-badge">VS</div>
+        <div class="player">
+          <h4 class="esp-title">Spain</h4>
+          <p>${ticket.spain.name}</p>
+          <p style="font-size:0.95rem; margin-top:-10px; color:#64748b;">Jersey #${ticket.spain.number}</p>
+          <img src="${ticket.spain.photo}" alt="ESP" onerror="this.src='https://via.placeholder.com/150/fca5a5/000000?text=ESP'">
+        </div>
+      </div>
+    `;
+  }
+
+  // Voice Announcement Feature
+  function announceTicket(ticket) {
+    if ('speechSynthesis' in window) {
+      const msg = new SpeechSynthesisUtterance();
+      msg.text = `Ticket ${ticket.id}. For Argentina, ${ticket.argentina.name}, Jersey number ${ticket.argentina.number}. Versus Spain, ${ticket.spain.name}, Jersey number ${ticket.spain.number}.`;
+      msg.rate = 0.9;
+      msg.volume = 1;
+      window.speechSynthesis.speak(msg);
+    }
+  }
+
+  // Handle Button Click & Logic
+  function processCode() {
+    const inputVal = document.getElementById('reveal-code').value.trim().toUpperCase();
     
+    // Play Background Crowd Sound
+    const audio = document.getElementById('stadium-cheer');
+    audio.volume = 0.3;
+    audio.play().catch(e => console.log("Audio play prevented by browser policy"));
+
+    if (inputVal === 'ALL') {
+      showAllGrid();
+    } else if (inputVal === 'GOAT VS TIKI TAKA') {
+      startAnimatedSequence();
+    } else {
+      // Check if it's a specific ticket number
+      const num = parseInt(inputVal);
+      if (!isNaN(num) && num >= 1 && num <= 23) {
+        showSingleTicket(num);
+      } else {
+        alert("Incorrect code. Please ask the creator for the code!");
+        audio.pause();
+      }
+    }
+  }
+
+  // View 1: Show "ALL" Grid
+  function showAllGrid() {
+    document.getElementById('welcome-screen').style.display = 'none';
+    const gridContainer = document.getElementById('all-tickets-grid');
+    gridContainer.style.display = 'flex';
+    
+    window.speechSynthesis.cancel();
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.speak(new SpeechSynthesisUtterance("All tickets revealed."));
+    }
+
+    ticketsData.forEach(ticket => {
+      const ticketDiv = document.createElement('div');
+      ticketDiv.className = 'ticket-static';
+      ticketDiv.innerHTML = createTicketHTML(ticket);
+      gridContainer.appendChild(ticketDiv);
+    });
+  }
+
+  // View 2: Show Single Ticket Animation
+  function showSingleTicket(id) {
+    document.getElementById('welcome-screen').style.display = 'none';
+    const wrapper = document.getElementById('tickets-wrapper');
+    wrapper.style.display = 'block';
+    
+    const ticket = ticketsData.find(t => t.id === id);
+    
+    const ticketDiv = document.createElement('div');
+    ticketDiv.className = 'ticket active';
+    ticketDiv.id = 'ticket-' + ticket.id;
+    ticketDiv.innerHTML = createTicketHTML(ticket);
+    wrapper.appendChild(ticketDiv);
+    
+    setTimeout(() => {
+      document.getElementById('reveal-' + ticket.id).classList.add('show');
+      window.speechSynthesis.cancel(); // Stop any previous talking
+      announceTicket(ticket);
+    }, 1000);
+  }
+
+  // View 3: Sequence Animation (GOAT VS TIKI TAKA)
+  function startAnimatedSequence() {
+    document.getElementById('welcome-screen').style.display = 'none';
+    const wrapper = document.getElementById('tickets-wrapper');
+    wrapper.style.display = 'block';
+    window.speechSynthesis.cancel();
+    
+    // Prepare all tickets in DOM but hidden
     ticketsData.forEach((ticket) => {
       const ticketDiv = document.createElement('div');
       ticketDiv.className = 'ticket';
       ticketDiv.id = 'ticket-' + ticket.id;
-      
-      ticketDiv.innerHTML = `
-        <div class="ticket-header">
-          <h3>Ticket Number ${ticket.id}</h3>
-        </div>
-        <div class="players-reveal" id="reveal-${ticket.id}">
-          <div class="player">
-            <h4 class="arg-title">Argentina</h4>
-            <p>${ticket.argentina.name}</p>
-            <p style="font-size:0.95rem; margin-top:-10px; color:#64748b;">Jersey #${ticket.argentina.number}</p>
-            <img src="${ticket.argentina.photo}" alt="${ticket.argentina.name}" onerror="this.src='https://via.placeholder.com/150/7dd3fc/000000?text=ARG'">
-          </div>
-          
-          <div class="vs-badge">VS</div>
-          
-          <div class="player">
-            <h4 class="esp-title">Spain</h4>
-            <p>${ticket.spain.name}</p>
-            <p style="font-size:0.95rem; margin-top:-10px; color:#64748b;">Jersey #${ticket.spain.number}</p>
-            <img src="${ticket.spain.photo}" alt="${ticket.spain.name}" onerror="this.src='https://via.placeholder.com/150/fca5a5/000000?text=ESP'">
-          </div>
-        </div>
-      `;
+      ticketDiv.innerHTML = createTicketHTML(ticket);
       wrapper.appendChild(ticketDiv);
     });
-  }
 
-  function checkCode() {
-    const inputVal = document.getElementById('reveal-code').value;
-    if (inputVal === 'GOAT VS TIKI TAKA') {
-      document.getElementById('unlock-section').style.display = 'none';
-      startSequence();
-    } else {
-      alert('Incorrect code. Try again!');
-    }
-  }
-
-  function startSequence() {
     let current = 1;
     const total = ticketsData.length;
     
-    function next() {
+    function playNext() {
       if (current > total) return;
       
       const currentTicket = document.getElementById('ticket-' + current);
       const currentReveal = document.getElementById('reveal-' + current);
+      const ticketData = ticketsData.find(t => t.id === current);
       
       currentTicket.classList.add('active');
       
       setTimeout(() => {
         currentReveal.classList.add('show');
+        announceTicket(ticketData);
       }, 1200);
       
+      // Give it enough time to finish talking (approx 8.5 seconds) before moving to next
       setTimeout(() => {
         currentTicket.classList.remove('active');
         currentTicket.classList.add('diluted');
-        
         current++;
-        next();
-      }, 6000);
+        playNext();
+      }, 9000); 
     }
     
-    next();
+    playNext();
   }
 
-  window.onload = renderTickets;
+  // Run on page load
+  window.onload = initLockedGrid;
 </script>
 </body>
 </html>
