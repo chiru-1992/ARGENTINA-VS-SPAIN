@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIFA 2026 Final Tickets</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0b0f19;
+    color: #f8fafc;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+  
+  #welcome-screen {
+    padding: 60px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  h1 {
+    font-size: 3.5rem;
+    color: #fbbf24;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  
+  h2 {
+    font-size: 2rem;
+    color: #f1f5f9;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  
+  .match-details {
+    font-size: 1.4rem;
+    color: #94a3b8;
+    margin-bottom: 40px;
+    background: rgba(255,255,255,0.05);
+    display: inline-block;
+    padding: 10px 30px;
+    border-radius: 50px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  
+  #unlock-section {
+    margin-top: 20px;
+  }
+  
+  input[type="text"] {
+    padding: 15px 20px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: 2px solid #3b82f6;
+    background-color: #1e293b;
+    color: white;
+    outline: none;
+    width: 280px;
+    transition: all 0.3s;
+  }
+  
+  input[type="text"]:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
+  }
+  
+  button {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 12px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+  }
+  
+  button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+  }
+  
+  .ticket-container {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    margin: 20px auto;
+    height: 480px;
+    perspective: 1500px;
+  }
+  
+  .ticket {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) translateZ(-1000px) scale(0.4);
+    width: 92%;
+    background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+    color: #0f172a;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: all 1.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-sizing: border-box;
+    pointer-events: none;
+  }
+  
+  .ticket.active {
+    transform: translateX(-50%) translateZ(0) scale(1);
+    opacity: 1;
+    z-index: 10;
+  }
+  
+  .ticket.diluted {
+    transform: translateX(-50%) translateZ(500px) translateY(-80px) scale(1.1);
+    opacity: 0;
+    z-index: 1;
+    transition: all 1.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+  }
+  
+  .ticket-header {
+    border-bottom: 3px dashed #cbd5e1;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+  }
+  
+  .ticket-header h3 {
+    margin: 0;
+    font-size: 2rem;
+    color: #1e293b;
+    letter-spacing: 1px;
+  }
+  
+  .players-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 2s ease-out;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .players-reveal.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .player {
+    text-align: center;
+    width: 44%;
+    background: rgba(15, 23, 42, 0.03);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  
+  .player h4 {
+    margin: 0 0 5px 0;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+  }
+  
+  .arg-title { color: #0284c7; }
+  .esp-title { color: #dc2626; }
+  
+  .player p {
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin: 5px 0 15px 0;
+    color: #334155;
+  }
+  
+  .player img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  }
+  
+  .vs-badge {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #94a3b8;
+    font-style: italic;
+    background: #f1f5f9;
+    padding: 10px 15px;
+    border-radius: 50%;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+  }
+</style>
+</head>
+<body>
+
+<div id="welcome-screen">
+  <h1>welcome to the finals</h1>
+  <h2>final of FIFA 2026 Argentina versus Spain</h2>
+  <div class="match-details">take 20 July time 12:30 a.m.</div>
+  
+  <div id="unlock-section">
+    <input type="text" id="reveal-code" placeholder="Place to reveal the ticket">
+    <button onclick="checkCode()">Reveal Tickets</button>
+  </div>
+</div>
+
+<div class="ticket-container" id="tickets-wrapper">
+  <!-- JavaScript dynamically generates the tickets here -->
+</div>
+
+<script>
+  const ticketsData = [
+    {
+      id: 1,
+      argentina: { name: "Nahuel MOLINA", number: 26, photo: "images/argentina/nahuel_molina.jpg" },
+      spain: { name: "PEDRI", number: 20, photo: "images/spain/pedri.jpg" }
+    },
+    {
+      id: 2,
+      argentina: { name: "Lionel MESSI", number: 10, photo: "images/argentina/lionel_messi.jpg" },
+      spain: { name: "Marc CUCURELLA", number: 24, photo: "images/spain/marc_cucurella.jpg" }
+    },
+    {
+      id: 3,
+      argentina: { name: "Enzo FERNANDEZ", number: 24, photo: "images/argentina/enzo_fernandez.jpg" },
+      spain: { name: "Pau CUBARSI", number: 22, photo: "images/spain/pau_cubarsi.jpg" }
+    },
+    {
+      id: 4,
+      argentina: { name: "Facundo MEDINA", number: 25, photo: "images/argentina/facundo_medina.jpg" },
+      spain: { name: "Martin ZUBIMENDI", number: 18, photo: "images/spain/martin_zubimendi.jpg" }
+    },
+    {
+      id: 5,
+      argentina: { name: "Alexis MAC ALLISTER", number: 20, photo: "images/argentina/alexis_mac_allister.jpg" },
+      spain: { name: "Aymeric LAPORTE", number: 14, photo: "images/spain/aymeric_laporte.jpg" }
+    },
+    {
+      id: 6,
+      argentina: { name: "Nicolas OTAMENDI", number: 19, photo: "images/argentina/nicolas_otamendi.jpg" },
+      spain: { name: "RODRI", number: 16, photo: "images/spain/rodri.jpg" }
+    },
+    {
+      id: 7,
+      argentina: { name: "Nico GONZALEZ", number: 15, photo: "images/argentina/nico_gonzalez.jpg" },
+      spain: { name: "Pedro PORRO", number: 12, photo: "images/spain/pedro_porro.jpg" }
+    },
+    {
+      id: 8,
+      argentina: { name: "Cristian ROMERO", number: 13, photo: "images/argentina/cristian_romero.jpg" },
+      spain: { name: "Alex BAENA", number: 15, photo: "images/spain/alex_baena.jpg" }
+    },
+    {
+      id: 9,
+      argentina: { name: "Exequiel PALACIOS", number: 14, photo: "images/argentina/exequiel_palacios.jpg" },
+      spain: { name: "Marcos LLORENTE", number: 5, photo: "images/spain/marcos_llorente.jpg" }
+    },
+    {
+      id: 10,
+      argentina: { name: "Lisandro MARTINEZ", number: 6, photo: "images/argentina/lisandro_martinez.jpg" },
+      spain: { name: "GAVI", number: 9, photo: "images/spain/gavi.jpg" }
+    },
+    {
+      id: 11,
+      argentina: { name: "Giovani LO CELSO", number: 11, photo: "images/argentina/giovani_lo_celso.jpg" },
+      spain: { name: "Marc PUBILL", number: 2, photo: "images/spain/marc_pubill.jpg" }
+    },
+    {
+      id: 12,
+      argentina: { name: "Nicolas TAGLIAFICO", number: 3, photo: "images/argentina/nicolas_tagliafico.jpg" },
+      spain: { name: "Fabian RUIZ", number: 8, photo: "images/spain/fabian_ruiz.jpg" }
+    },
+    {
+      id: 13,
+      argentina: { name: "Lautaro MARTINEZ", number: 22, photo: "images/argentina/lautaro_martinez.jpg" },
+      spain: { name: "Alex GRIMALDO", number: 3, photo: "images/spain/alex_grimaldo.jpg" }
+    },
+    {
+      id: 14,
+      argentina: { name: "Marcos SENESI", number: 2, photo: "images/argentina/marcos_senesi.jpg" },
+      spain: { name: "Mikel OYARZABAL", number: 21, photo: "images/spain/mikel_oyarzabal.jpg" }
+    },
+    {
+      id: 15,
+      argentina: { name: "Julian ALVAREZ", number: 9, photo: "images/argentina/julian_alvarez.jpg" },
+      spain: { name: "Eric GARCIA", number: 4, photo: "images/spain/eric_garcia.jpg" }
+    },
+    {
+      id: 16,
+      argentina: { name: "Gonzalo MONTIEL", number: 4, photo: "images/argentina/gonzalo_montiel.jpg" },
+      spain: { name: "Ferran TORRES", number: 7, photo: "images/spain/ferran_torres.jpg" }
+    },
+    {
+      id: 17,
+      argentina: { name: "Jose Manuel LOPEZ", number: 21, photo: "images/argentina/jose_manuel_lopez.jpg" },
+      spain: { name: "Mikel MERINO", number: 6, photo: "images/spain/mikel_merino.jpg" }
+    },
+    {
+      id: 18,
+      argentina: { name: "Valentin BARCO", number: 8, photo: "images/argentina/valentina_barco.jpg" },
+      spain: { name: "Borja IGLESIAS", number: 26, photo: "images/spain/borja_iglesias.jpg" }
+    },
+    {
+      id: 19,
+      argentina: { name: "Nico PAZ", number: 18, photo: "images/argentina/nico_paz.jpg" },
+      spain: { name: "Victor MUNOZ", number: 25, photo: "images/spain/victor_munoz.jpg" }
+    },
+    {
+      id: 20,
+      argentina: { name: "Rodrigo DE PAUL", number: 7, photo: "images/argentina/rodrigo_de_paul.jpg" },
+      spain: { name: "Lamine YAMAL", number: 19, photo: "images/spain/lamine_yamal.jpg" }
+    },
+    {
+      id: 21,
+      argentina: { name: "Giuliano SIMEONE", number: 17, photo: "images/argentina/giuliano_simeone.jpg" },
+      spain: { name: "Nico WILLIAMS", number: 17, photo: "images/spain/nico_williams.jpg" }
+    },
+    {
+      id: 22,
+      argentina: { name: "Leandro PAREDES", number: 5, photo: "images/argentina/leandro_paredes.jpg" },
+      spain: { name: "Yeremy PINO", number: 11, photo: "images/spain/yeremy_pino.jpg" }
+    },
+    {
+      id: 23,
+      argentina: { name: "Thiago ALMADA", number: 16, photo: "images/argentina/thiayo_almada.jpg" },
+      spain: { name: "Dani OLMO", number: 10, photo: "images/spain/dani_olmo.jpg" }
+    }
+  ];
+
+  function renderTickets() {
+    const wrapper = document.getElementById('tickets-wrapper');
+    
+    ticketsData.forEach((ticket) => {
+      const ticketDiv = document.createElement('div');
+      ticketDiv.className = 'ticket';
+      ticketDiv.id = 'ticket-' + ticket.id;
+      
+      ticketDiv.innerHTML = `
+        <div class="ticket-header">
+          <h3>Ticket Number ${ticket.id}</h3>
+        </div>
+        <div class="players-reveal" id="reveal-${ticket.id}">
+          <div class="player">
+            <h4 class="arg-title">Argentina</h4>
+            <p>${ticket.argentina.name}</p>
+            <p style="font-size:0.95rem; margin-top:-10px; color:#64748b;">Jersey #${ticket.argentina.number}</p>
+            <img src="${ticket.argentina.photo}" alt="${ticket.argentina.name}" onerror="this.src='https://via.placeholder.com/150/7dd3fc/000000?text=ARG'">
+          </div>
+          
+          <div class="vs-badge">VS</div>
+          
+          <div class="player">
+            <h4 class="esp-title">Spain</h4>
+            <p>${ticket.spain.name}</p>
+            <p style="font-size:0.95rem; margin-top:-10px; color:#64748b;">Jersey #${ticket.spain.number}</p>
+            <img src="${ticket.spain.photo}" alt="${ticket.spain.name}" onerror="this.src='https://via.placeholder.com/150/fca5a5/000000?text=ESP'">
+          </div>
+        </div>
+      `;
+      wrapper.appendChild(ticketDiv);
+    });
+  }
+
+  function checkCode() {
+    const inputVal = document.getElementById('reveal-code').value;
+    if (inputVal === 'GOAT VS TIKI TAKA') {
+      document.getElementById('unlock-section').style.display = 'none';
+      startSequence();
+    } else {
+      alert('Incorrect code. Try again!');
+    }
+  }
+
+  function startSequence() {
+    let current = 1;
+    const total = ticketsData.length;
+    
+    function next() {
+      if (current > total) return;
+      
+      const currentTicket = document.getElementById('ticket-' + current);
+      const currentReveal = document.getElementById('reveal-' + current);
+      
+      currentTicket.classList.add('active');
+      
+      setTimeout(() => {
+        currentReveal.classList.add('show');
+      }, 1200);
+      
+      setTimeout(() => {
+        currentTicket.classList.remove('active');
+        currentTicket.classList.add('diluted');
+        
+        current++;
+        next();
+      }, 6000);
+    }
+    
+    next();
+  }
+
+  window.onload = renderTickets;
+</script>
+</body>
+</html>
