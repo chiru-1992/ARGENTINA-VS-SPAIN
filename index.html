@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FIFA 2026 Final</title>
+    <style>
+        body { margin: 0; font-family: 'Arial', sans-serif; text-align: center; overflow-x: hidden; }
+        #page-1 { background: linear-gradient(135deg, #87CEEB, #FF4500); padding: 40px; min-height: 100vh; }
+        .hero-img { width: 300px; border: 5px solid white; border-radius: 15px; margin: 10px; }
+        #page-2 { display: none; background: #000080; min-height: 100vh; padding: 20px; }
+        
+        .grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+        .card { width: 160px; height: 220px; background: #7CFC00; border: 6px solid gold; border-radius: 15px; opacity: 0; transition: opacity 1s; }
+        .dilute { opacity: 0.1 !important; }
+        
+        /* 3D Flip Effect */
+        .ticket-container { perspective: 1000px; width: 300px; margin: 50px auto; }
+        .ticket-inner { transition: transform 2s; transform-style: preserve-3d; }
+        .flip { transform: rotateY(180deg); }
+        .face { backface-visibility: hidden; position: absolute; width: 100%; }
+        .back { transform: rotateY(180deg); background: white; padding: 20px; border-radius: 20px; }
+    </style>
+</head>
+<body>
+    <audio id="bg-music" src="music.mp3" loop autoplay></audio>
+    
+    <div id="page-1">
+        <h1>WELCOME TO CHIRU'S WORLD</h1>
+        <img src="WhatsApp-Image-2022-12-18-at-19.01.39.jpeg" class="hero-img">
+        <h2>VS</h2>
+        <img src="images.jpeg" class="hero-img">
+        <br><button onclick="startApp()" style="padding:20px 40px; font-size:24px;">ENTER</button>
+    </div>
+
+    <div id="page-2">
+        <input id="code" placeholder="Secret Code">
+        <input id="num" placeholder="Ticket Number">
+        <button onclick="reveal()">REVEAL</button>
+        <div class="grid" id="grid"></div>
+        <div id="stage"></div>
+    </div>
+
+    <script>
+        // Ensure this array is full of player data
+        const ticketsData = [
+            { id: 1, owners: "NIRAJ and KARAN / SAJIT", arg: {name: "Messi", photo: "messi.jpg"}, esp: {name: "Gavi", photo: "gavi.jpg"} },
+            // Add all 23 tickets here
+        ];
+        
+        function startApp() {
+            document.getElementById('page-1').style.display = 'none';
+            document.getElementById('page-2').style.display = 'block';
+            const grid = document.getElementById('grid');
+            ticketsData.forEach(t => grid.innerHTML += `<div class="card" id="card-${t.id}">CREATOR- CHIRU<br>🔒 Ticket ${t.id}</div>`);
+            ticketsData.forEach((t, i) => setTimeout(() => document.getElementById(`card-${t.id}`).style.opacity = "1", i * 200));
+        }
+
+        function reveal() {
+            const num = document.getElementById('num').value;
+            document.querySelectorAll('.card').forEach(c => c.classList.add('dilute'));
+            const t = ticketsData.find(x => x.id == num);
+            if(t) {
+                document.getElementById('stage').innerHTML = `
+                    <div class="ticket-container" id="flip-card" onclick="this.querySelector('.ticket-inner').classList.add('flip')">
+                        <div class="ticket-inner">
+                            <div class="face"><h3>Ticket ${t.id} Locked</h3></div>
+                            <div class="face back">
+                                <img src="${t.arg.photo}" width="80"> ${t.arg.name} <br>
+                                <img src="${t.esp.photo}" width="80"> ${t.esp.name}
+                            </div>
+                        </div>
+                    </div>`;
+            }
+        }
+    </script>
+</body>
+</html>
