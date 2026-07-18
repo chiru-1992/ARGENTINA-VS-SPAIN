@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FIFA 2026 Final</title>
+    <style>
+        body { margin: 0; font-family: sans-serif; text-align: center; }
+        #page-1 { background: linear-gradient(135deg, #87CEEB, #FF4500); padding: 50px; min-height: 100vh; }
+        #page-2 { display: none; background: #000080; min-height: 100vh; padding: 20px; }
+        
+        /* Updated Grid to ensure all tickets fit */
+        .grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding-top: 20px; }
+        .card { 
+            width: 140px; height: 180px; background: #7CFC00; border: 6px solid gold; 
+            border-radius: 15px; display: flex; flex-direction: column; align-items: center; 
+            justify-content: center; opacity: 0; transition: opacity 1s; font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <audio id="bg-music" src="music.mp3" loop autoplay></audio>
+    
+    <div id="page-1">
+        <h1>WELCOME TO CHIRU'S WORLD OF GAME</h1>
+        <button onclick="startApp()" style="padding:20px 40px; font-size:24px;">ENTER</button>
+    </div>
+
+    <div id="page-2">
+        <input id="code" placeholder="Secret Code">
+        <input id="num" placeholder="Ticket Number">
+        <button onclick="reveal()">REVEAL</button>
+        <div class="grid" id="grid"></div>
+    </div>
+
+    <script>
+        // Ensure you have all 23 items here
+        const ticketsData = Array.from({length: 23}, (_, i) => ({ id: i + 1, owners: "Owner " + (i + 1) }));
+        
+        function startApp() {
+            document.getElementById('page-1').style.display = 'none';
+            document.getElementById('page-2').style.display = 'block';
+            document.getElementById('bg-music').play();
+            
+            const grid = document.getElementById('grid');
+            grid.innerHTML = ''; // Clear first
+            
+            // Generate all 23 cards immediately
+            ticketsData.forEach((t) => {
+                grid.innerHTML += `
+                    <div class="card" id="card-${t.id}">
+                        CREATOR- CHIRU<br>🔒 Ticket ${t.id}
+                    </div>`;
+            });
+            
+            // Loop through all 23 cards and fade them in slowly
+            ticketsData.forEach((t, i) => {
+                setTimeout(() => {
+                    const el = document.getElementById(`card-${t.id}`);
+                    if(el) el.style.opacity = "1";
+                }, i * 3000); // 3000ms = 3 seconds
+            });
+        }
+
+        function reveal() {
+            if(document.getElementById('code').value !== "GOAT VS TIKI TAKA") return alert("Wrong Code!");
+            // Reveal logic remains the same
+        }
+    </script>
+</body>
+</html>
