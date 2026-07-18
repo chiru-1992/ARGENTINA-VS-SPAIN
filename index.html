@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FIFA 2026 Final Tickets</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #0b2d0b; color: white; text-align: center; }
+        
+        /* Welcome Page Styles */
+        #page-1 { padding: 40px; }
+        .hero-images { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
+        .hero-img { width: 350px; border: 4px solid gold; border-radius: 15px; }
+        
+        /* Premium Green & Gold Ticket Cards */
+        #page-2 { display: none; padding: 20px; }
+        .grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 30px; }
+        .card { 
+            width: 150px; background: #1a4a1a; color: white; padding: 15px; border-radius: 15px; 
+            border: 3px solid gold; opacity: 0; transition: opacity 1s; font-size: 0.9rem;
+            position: relative;
+        }
+        .locked-icon { font-size: 2rem; color: gold; display: block; margin-bottom: 5px; }
+        .watermark { position: absolute; bottom: 5px; right: 5px; font-size: 0.6rem; color: rgba(255,255,255,0.3); }
+        
+        .revealed { background: white; color: black; padding: 30px; border-radius: 20px; width: 80%; margin: 20px auto; border: 5px solid gold; }
+    </style>
+</head>
+<body>
+
+<audio id="bg-music" src="music.mp3" loop></audio>
+
+<div id="page-1">
+    <h1>WELCOME TO CHIRU'S WORLD OF GAME</h1>
+    <h3>BUY TICKET FOR Rs 100 AND GET EXCITING PRIZE</h3>
+    <p>1st prize- Rs 1200, 2nd Prize- 600 and 3rd prize- 200</p>
+    <h2>FINAL OF FIFA WORLD CUP 2026</h2>
+    <p>ARGENTINA VS SPAIN</p>
+    <p>DATE- 20 JULY | TIME- 12:30</p>
+    <div class="hero-images">
+        <img src="WhatsApp-Image-2022-12-18-at-19.01.39_2.jpeg" class="hero-img">
+        <img src="images_2.jpeg" class="hero-img">
+    </div>
+    <button onclick="startApp()" style="padding:15px 30px; font-size:20px; cursor:pointer; background:gold; border:none; border-radius:10px;">ENTER</button>
+</div>
+
+<div id="page-2">
+    <input id="code" placeholder="Secret Code">
+    <input id="num" placeholder="Ticket Number or ALL">
+    <button onclick="reveal()">REVEAL</button>
+    <div class="grid" id="grid"></div>
+    <div id="stage"></div>
+</div>
+
+<script>
+    const ticketsData = [
+        { id: 1, owners: "NIRAJ and KARAN / SAJIT", argentina: { name: "Lionel MESSI", number: 10, photo: "images/argentina/messi.jpg" }, spain: { name: "GAVI", number: 9, photo: "images/spain/gavi.jpg" } },
+        // Add tickets 2 through 23 here following the pattern above
+    ];
+    
+    function startApp() {
+        document.getElementById('page-1').style.display = 'none';
+        document.getElementById('page-2').style.display = 'block';
+        document.getElementById('bg-music').play();
+        
+        const grid = document.getElementById('grid');
+        ticketsData.forEach((t, i) => {
+            grid.innerHTML += `
+                <div class="card" id="card-${t.id}">
+                    <span class="locked-icon">🔒</span>
+                    Ticket ${t.id}<br><b>${t.owners}</b>
+                    <div class="watermark">CREATOR- CHIRU</div>
+                </div>`;
+        });
+        
+        // Appear one after another every 3 seconds
+        let i = 0;
+        function showNext() {
+            if(i < ticketsData.length) {
+                document.getElementById(`card-${ticketsData[i].id}`).style.opacity = "1";
+                i++;
+                setTimeout(showNext, 3000); 
+            }
+        }
+        showNext();
+    }
+
+    function reveal() {
+        if(document.getElementById('code').value !== "GOAT VS TIKI TAKA") return alert("Wrong Code!");
+        const num = document.getElementById('num').value.toUpperCase();
+        document.getElementById('grid').style.display = 'none';
+        
+        if(num === 'ALL') ticketsData.forEach(t => show(t));
+        else {
+            const t = ticketsData.find(x => x.id == num);
+            if(t) show(t);
+        }
+    }
+
+    function show(t) {
+        document.getElementById('stage').innerHTML += `
+            <div class="revealed">
+                <h3>Ticket ${t.id} - ${t.owners}</h3>
+                <div style="display:flex; justify-content:space-around">
+                    <div><img src="${t.argentina.photo}" width="100"><p>${t.argentina.name} #${t.argentina.number}</p></div>
+                    <div><img src="${t.spain.photo}" width="100"><p>${t.spain.name} #${t.spain.number}</p></div>
+                </div>
+            </div>`;
+    }
+</script>
+</body>
+</html>
